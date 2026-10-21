@@ -1,0 +1,13 @@
+{
+  "name": "espelho-interior",
+  "version": "1.0.0",
+  "description": "Tarô junguiano: escreva sua pergunta, escolha as cartas e receba uma leitura para refletir.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node servidor-local.js"
+  },
+  "engines": {
+    "node": ">=20.12"
+  }
+}

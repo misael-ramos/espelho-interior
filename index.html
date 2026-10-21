@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Espelho Interior</title>
+<meta name="description" content="Tarô junguiano: escreva sua pergunta, escolha as cartas e receba uma leitura para refletir.">
+<meta name="theme-color" content="#15162B">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Figtree:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <button class="brand" type="button" id="brand" aria-label="Espelho Interior, início">
+      <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M2 14a12 12 0 1 0 24 0a12 12 0 1 0 -24 0M5.5 5.5H22.5V22.5H5.5ZM5.5 14a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0 -17 0" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M11.5 14a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0" fill="#D6A84A" stroke="currentColor"/></svg>
+      Espelho Interior
+    </button>
+    <nav class="nav" aria-label="Seções">
+      <button type="button" data-view="consulta" aria-current="page">Consulta</button>
+      <button type="button" data-view="baralho">Baralho</button>
+      <button type="button" data-view="diario">Diário</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="v-consulta" class="view">
+      <ol class="steps" id="steps" aria-label="Etapas da consulta"></ol>
+
+      <!-- Etapa 1 -->
+      <div class="stage" id="s1">
+        <div class="grid-intro">
+          <form class="col" id="f-dados" novalidate>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <h1 class="display-xl">Antes de embaralhar</h1>
+              <p class="lede">Algumas respostas rápidas para a leitura falar com você, e não com qualquer pessoa. Só o nome é obrigatório.</p>
+            </div>
+            <div class="field">
+              <label for="nome">Como podemos te chamar?</label>
+              <input class="input" id="nome" type="text" autocomplete="given-name" placeholder="Seu nome ou apelido" maxlength="40">
+              <span class="error" id="nome-erro" hidden>Escreva um nome ou apelido para continuar.</span>
+            </div>
+            <div class="field">
+              <label for="nasc">Data de nascimento <span class="opt">(opcional)</span></label>
+              <input class="input date" id="nasc" type="date">
+              <span class="hint">Serve para calcular o arcano do seu ano pessoal, que aparece no fim da leitura.</span>
+            </div>
+            <fieldset>
+              <legend class="legend">Sobre o que é a sua pergunta?</legend>
+              <div class="chips" id="areas"></div>
+            </fieldset>
+            <fieldset>
+              <legend class="legend">Como você chega hoje? <span class="opt">(opcional)</span></legend>
+              <div class="chips" id="humores"></div>
+            </fieldset>
+            <div class="actions">
+              <button class="btn" type="submit">Continuar para a pergunta</button>
+              <span class="hint">Suas respostas ficam salvas só neste navegador.</span>
+            </div>
+          </form>
+          <div class="aside"><div class="hero-fan" id="hero" aria-hidden="true"></div></div>
+        </div>
+      </div>
+
+      <!-- Etapa 2 -->
+      <div class="stage" id="s2" hidden>
+        <div style="display:flex;flex-direction:column;gap:14px;max-width:760px">
+          <h1 class="display-xl" id="q-title">Qual é a sua pergunta?</h1>
+          <p class="lede">Escreva do jeito que você falaria com alguém de confiança. Quanto mais concreta a situação, mais a leitura consegue dizer.</p>
+          <label for="pergunta" class="legend" style="margin-top:8px">Sua pergunta</label>
+          <textarea class="input" id="pergunta" maxlength="300" placeholder="Ex.: O que eu preciso enxergar sobre o meu trabalho agora?"></textarea>
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px" class="hint">
+            <span>Perguntas abertas rendem mais: em vez de “vai dar certo?”, tente “o que preciso ver sobre…?”.</span>
+            <span id="contador">0 de 300</span>
+          </div>
+          <span class="error" id="perg-erro" hidden>Escreva sua pergunta para as cartas poderem responder.</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <h2 style="font-size:30px">Tiragem</h2>
+            <p class="hint" style="font-size:15px">Sugerimos pela forma da sua pergunta. Você pode trocar.</p>
+          </div>
+          <div class="spread-box">
+            <div class="info">
+              <span class="badge" id="sug-badge">Sugerida para a sua pergunta</span>
+              <div style="font-family:var(--display);font-size:28px;line-height:1.1" id="sp-nome"></div>
+              <p style="margin-top:8px;color:#A7A6C4;font-size:15px" id="sp-sobre"></p>
+            </div>
+            <ol class="slots" id="sp-slots" aria-label="Posições da tiragem"></ol>
+          </div>
+          <div class="spread-grid" id="spreads"></div>
+        </div>
+        <div class="actions" style="justify-content:space-between;border-top:1px solid var(--line);padding-top:24px">
+          <button class="link" type="button" data-go="1">Voltar aos seus dados</button>
+          <button class="btn" type="button" id="b-embaralhar">Embaralhar as cartas</button>
+        </div>
+      </div>
+
+      <!-- Etapa 3 -->
+      <div class="stage" id="s3" hidden>
+        <div style="display:flex;flex-wrap:wrap;gap:24px 40px;align-items:flex-end;justify-content:space-between">
+          <div style="max-width:600px;display:flex;flex-direction:column;gap:12px">
+            <h1 class="display-xl" id="pick-title">Escolha as cartas</h1>
+            <p class="lede">Respire, volte à sua pergunta e toque nas cartas que chamarem você. Não existe escolha errada.</p>
+          </div>
+          <div class="question-echo"><div class="hint">Sua pergunta</div><p class="q" id="echo-q"></p></div>
+        </div>
+        <div id="shuffle-zone" aria-live="polite"><div class="shuffle" id="shuffle"></div><p class="hint" style="text-align:center">Embaralhando…</p></div>
+        <div class="deck" id="deck" hidden></div>
+        <div class="pickbar">
+          <ol class="slots" id="pick-slots" aria-label="Posições"></ol>
+          <div class="actions">
+            <button class="link" type="button" id="b-reemb">Embaralhar de novo</button>
+            <button class="btn" type="button" id="b-revelar" disabled>Faltam cartas</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Etapa 4 -->
+      <div class="stage" id="s4" hidden>
+        <div style="text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center">
+          <div class="hint" id="read-meta"></div>
+          <h1 style="font-style:italic;font-weight:400;font-size:clamp(26px,4vw,36px);line-height:1.25;max-width:26ch" id="read-q"></h1>
+        </div>
+        <div class="table" id="table"></div>
+        <p class="hint" id="flip-hint" style="text-align:center">Toque em cada carta para revelá-la.</p>
+        <div class="actions" style="justify-content:center" id="reveal-actions">
+          <button class="btn" type="button" id="b-todas">Revelar todas</button>
+        </div>
+        <article class="reading" id="reading" hidden aria-live="polite">
+          <div class="thinking" id="thinking" hidden><span class="dot"></span><span id="thinking-txt">As cartas estão sendo lidas…</span><button class="link" type="button" id="b-parar">Parar</button></div>
+          <div id="reading-body"></div>
+          <div class="year" id="year" hidden></div>
+          <p class="note" id="reading-note" hidden></p>
+          <div class="actions" id="reading-actions" hidden>
+            <button class="btn" type="button" id="b-salvar">Salvar no diário</button>
+            <button class="link" type="button" id="b-copiar">Copiar leitura</button>
+            <button class="link" type="button" id="b-nova">Fazer outra pergunta</button>
+            <span class="hint" id="acao-status" role="status"></span>
+          </div>
+          <p class="note">O tarô aqui é uma ferramenta de reflexão. Ele não substitui orientação médica, psicológica, jurídica ou financeira.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="v-baralho" class="view" hidden>
+      <div class="stage">
+        <div style="display:flex;flex-direction:column;gap:12px;max-width:720px">
+          <h1 class="display-xl">O baralho</h1>
+          <p class="lede">As 78 cartas, com o que cada uma diz de pé e invertida. Toque numa carta para ver de perto.</p>
+        </div>
+        <div class="filters" id="filtros" role="group" aria-label="Filtrar cartas"></div>
+        <div class="detail" id="detalhe" hidden></div>
+        <div class="cards-grid" id="grade"></div>
+      </div>
+    </section>
+
+    <section id="v-diario" class="view" hidden>
+      <div class="stage">
+        <div style="display:flex;flex-direction:column;gap:12px;max-width:720px">
+          <h1 class="display-xl">Diário</h1>
+          <p class="lede">As leituras que você salvou. Elas ficam guardadas só neste navegador.</p>
+        </div>
+        <div class="entries" id="entradas"></div>
+      </div>
+    </section>
+  </main>
+</div>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
